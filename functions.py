@@ -71,7 +71,7 @@ def GCD(x,y):
 def LCM(x,y):
     return x*y//GCD(x,y)
 
-# Generate a list of the n first prime numbers
+# Generate a list of primes of the first n numbers
 def prime_sieve(n):
     sieve = [True]*n
     
@@ -79,6 +79,12 @@ def prime_sieve(n):
         if sieve[i]:
             sieve[i*i::2*i] = [False]*((n-i*i-1)//(2*i)+1)
     return [2]+[i for i in range(3,n,2) if sieve[i]]
+
+# Returns an upper bound for the n-th prime number
+def prime_upper_bound(n):
+    upper_bound = n*(np.log(n) + np.log(np.log(n)))
+    
+    return int(upper_bound)
 
 # Compute the number of divisors of integer n.
 def number_of_divisors(n):
