@@ -12,6 +12,9 @@ Functions used for Project Euler solutions
 """
 
 import numpy as np
+import math
+from decimal import *
+
 
 # Test if the integer n is prime
 def is_prime(n):
@@ -80,6 +83,18 @@ def prime_sieve(n):
             sieve[i*i::2*i] = [False]*((n-i*i-1)//(2*i)+1)
     return [2]+[i for i in range(3,n,2) if sieve[i]]
 
+# Generate a boolean array where TRUE is for prime and FALSE for composite
+def prime_check(n):
+    sieve = prime_sieve(n)
+    
+    check = [False]*(n+1)
+    
+    for i in sieve:
+        check[i] = True
+    
+    return check
+
+
 # Returns an upper bound for the n-th prime number
 def prime_upper_bound(n):
     upper_bound = n*(np.log(n) + np.log(np.log(n)))
@@ -108,7 +123,7 @@ def Euler_totient(n):
     
     for i in factors:
         total = total - total//i
-    print(total)
+    return total
 
 # Compute the Collatz sequence chain of the integer n, which halts when it 
 # reaches 1
@@ -224,3 +239,59 @@ def is_binary_palindrome(n):
     if binary == binary[::-1]:
         return True
     return False
+
+def binomial(n,k):
+    return math.factorial(n) // math.factorial(k) // math.factorial(n-k)
+
+# Computes the n-th triangle number
+def triangle(n):
+    return binomial(n+1,2)
+
+# Return the alphabetical value of character
+def char_place(char):
+    return ord(char.lower()) - 96
+
+# Return a list of the first n-convergents of e
+def convergent_e(total):
+    
+    precomp = [2,1,2]
+    
+    lst = []
+    lst.append(precomp)
+    
+    rest = (total-3)//3 + 1
+    
+    for i in range(rest):
+        lst.append([1,1,(2+i)*2])
+    
+    lst = [x for l in lst for x in l]
+    
+    return lst[:total]
+
+# Returns a fraction from a convergent
+def convergent_to_fraction(convergent):
+    num = 1
+    den = 0
+    
+    for u in reversed(convergent):
+        num, den = den+num*u,num
+    
+    return den,num
+
+# Calculate the power a^m mod n using square and multiply
+def square_and_multiply(a,m,n):
+    binary = bin(m)[2:]
+    
+    c = a
+    
+    lst = [int(i) for i in str(binary)]
+    
+    for i in range(1,len(lst)):
+        c = (c*c) % n
+        
+        if lst[i] == 1:
+            c = (a*c) % n
+    
+    return c
+    
+
